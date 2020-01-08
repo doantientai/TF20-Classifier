@@ -18,11 +18,16 @@ from shutil import copyfile
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline'
 
-DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_128'
-DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_128_baseline'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_128'
+# DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_128_baseline'
 
-EARLY_STOP = None  # Number of waiting epochs or None
+DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10_'
+DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_10_baseline_categorical_loss'
+EARLY_STOP = 3  # Number of waiting epochs or None
+
+# EARLY_STOP = None  # Number of waiting epochs or None
 
 BATCH_SIZE = 512
 VAL_BATCH_SIZE = 1000
@@ -39,6 +44,8 @@ if __name__ == '__main__':
 
     list_classes = [str(i) for i in range(10)]
     num_classes = len(list_classes)
+    print(f'Categories:')
+    print(list_classes)
 
     train_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our training data
     valid_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our validation data
@@ -47,13 +54,15 @@ if __name__ == '__main__':
                                                                directory=DIR_TRAIN,
                                                                shuffle=True,
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                               class_mode='categorical')
+                                                               class_mode='categorical',
+                                                               classes=list_classes)
 
     valid_data_gen = valid_image_generator.flow_from_directory(batch_size=VAL_BATCH_SIZE,
                                                                directory=DIR_VALID,
                                                                shuffle=True,
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                               class_mode='categorical')
+                                                               class_mode='categorical',
+                                                               classes=list_classes)
 
     sample_training_images, _ = next(train_data_gen)
 
@@ -66,10 +75,11 @@ if __name__ == '__main__':
         MaxPooling2D(),
         Flatten(),
         Dense(512, activation='relu'),
-        Dense(num_classes, activation='sigmoid')
+        Dense(num_classes, activation='softmax')
     ])
 
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    # model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
 
     dir_tensorboard = os.path.join(DIR_PROJECT, 'logs')
