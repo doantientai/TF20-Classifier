@@ -25,6 +25,14 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_40k_split'
 
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_max_generated_split/combine'
+# DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_max_split'
+
+DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_maxX3_generated_split/combine'
+DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_maxX3_split'
+
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_20k_generated_split/combine'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_20k_selected'
@@ -36,13 +44,14 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_10_baseline_categorical_loss'
-EARLY_STOP = None  # Number of waiting epochs or None
+# EARLY_STOP = 20  # Number of waiting epochs or None
 
-# EARLY_STOP = None  # Number of waiting epochs or None
+RESUME = True
+EARLY_STOP = None  # Number of waiting epochs or None
 
 BATCH_SIZE = 512
 VAL_BATCH_SIZE = 1000
-EPOCHS = 50
+EPOCHS = 200
 IMG_HEIGHT = IMG_WIDTH = 32
 
 SUMMARY = False
@@ -67,9 +76,11 @@ classifier = Sequential([
 
 
 if __name__ == '__main__':
-    os.makedirs(DIR_PROJECT)
-    copyfile(os.path.join(os.getcwd(), 'train.py'),
-             os.path.join(DIR_PROJECT, 'train.py'))
+    dir_tensorboard = os.path.join(DIR_PROJECT, 'logs')
+    dir_save_models = os.path.join(DIR_PROJECT, 'models')
+    if not RESUME:
+        os.makedirs(DIR_PROJECT)
+        os.makedirs(dir_save_models)
     print(f'Categories:')
     print(list_classes)
 
@@ -99,9 +110,25 @@ if __name__ == '__main__':
     if SUMMARY:
         classifier.summary()
 
-    dir_tensorboard = os.path.join(DIR_PROJECT, 'logs')
-    dir_save_models = os.path.join(DIR_PROJECT, 'models')
-    os.makedirs(dir_save_models)
+    if RESUME:
+        ### look for latest model checkpoint in the model/ dir
+        list_ckpts = os.listdir(dir_save_models)
+        list_ckpts.sort()
+        latest_ckpt = list_ckpts[-1]
+        current_epoch = int(latest_ckpt[8:10])
+
+        copyfile(os.path.join(os.getcwd(), 'train.py'),
+                 os.path.join(DIR_PROJECT, f'train_resume{current_epoch}.py'))
+
+        print(f'Continuing training from epoch {current_epoch}')
+        print(f'Loading weights from {latest_ckpt}')
+        classifier.load_weights(os.path.join(dir_save_models, latest_ckpt))
+
+    else:
+        current_epoch = 0
+        copyfile(os.path.join(os.getcwd(), 'train.py'),
+                 os.path.join(DIR_PROJECT, 'train.py'))
+
     callbacks = [
         tf.keras.callbacks.TensorBoard(log_dir=dir_tensorboard),
         tf.keras.callbacks.ModelCheckpoint(
@@ -112,15 +139,18 @@ if __name__ == '__main__':
             save_freq='epoch'
         )
     ]
+
     # Interrupt training if `val_loss` stops improving for over EARLY_STOP epochs
     if EARLY_STOP is not None:
         callbacks.append(tf.keras.callbacks.EarlyStopping(patience=EARLY_STOP, monitor='val_accuracy'))
 
     history = classifier.fit_generator(
         train_data_gen,
+        initial_epoch=current_epoch,
         steps_per_epoch=num_train_samples_per_epoch // BATCH_SIZE,
         epochs=EPOCHS,
         validation_data=valid_data_gen,
         validation_steps=num_valid_samples_per_epoch // BATCH_SIZE,
-        callbacks=callbacks
+        callbacks=callbacks,
     )
+

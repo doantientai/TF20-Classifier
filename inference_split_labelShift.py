@@ -29,7 +29,10 @@ DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_la
 # DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_40k_generated'
 # PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
 
-DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_max_generated'
+# DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_max_generated'
+# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
+
+DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_maxX3_generated'
 PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
 
 if DIR_TEST.endswith('/'):
