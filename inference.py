@@ -25,13 +25,13 @@ DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/
 PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline/models/weights.09-0.9396.hdf5'
 
 
-# THRESHOLD_SCORE = 0.21
-if DIR_TEST.endswith('/'):
-    path_data_inference = DIR_TEST[:-1]
-path_out_root = DIR_TEST + '_split'
-path_out_text = join(path_out_root, 'split.txt')
-path_out_keep = join(path_out_root, "keep")
-path_out_drop = join(path_out_root, "drop")
+# # THRESHOLD_SCORE = 0.21
+# if DIR_TEST.endswith('/'):
+#     path_data_inference = DIR_TEST[:-1]
+# path_out_root = DIR_TEST + '_split'
+# path_out_text = join(path_out_root, 'split.txt')
+# path_out_keep = join(path_out_root, "keep")
+# path_out_drop = join(path_out_root, "drop")
 
 
 def get_label(file_path):

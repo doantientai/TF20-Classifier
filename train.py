@@ -9,17 +9,21 @@ import os
 import numpy as np
 from shutil import copyfile
 
-# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_20k_generated_split/combine'
+import logging
+logging.disable(logging.WARNING)
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_20k_selected'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline'
 
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_10k_generated_split/combine'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_10k_selected'
 
-# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_20k_generated_split/combine'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_20k_selected'
 
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_128'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
@@ -28,18 +32,18 @@ from shutil import copyfile
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_10_baseline_categorical_loss'
-EARLY_STOP = 3  # Number of waiting epochs or None
+EARLY_STOP = None  # Number of waiting epochs or None
 
 # EARLY_STOP = None  # Number of waiting epochs or None
 
 BATCH_SIZE = 512
 VAL_BATCH_SIZE = 1000
-EPOCHS = 100
+EPOCHS = 50
 IMG_HEIGHT = IMG_WIDTH = 32
 
 SUMMARY = False
 
-num_train_samples_per_epoch = 10000
+num_train_samples_per_epoch = 100000
 num_valid_samples_per_epoch = 10000
 
 ### model
@@ -68,6 +72,7 @@ if __name__ == '__main__':
     # Generator for training data and validation data
     train_image_generator = ImageDataGenerator(
         rescale=1./255,
+        validation_split=0.1
         # TODO: Data augmentation options
     )
     valid_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our validation data
@@ -85,8 +90,6 @@ if __name__ == '__main__':
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                class_mode='categorical',
                                                                classes=list_classes)
-
-    sample_training_images, _ = next(train_data_gen)
 
     classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     if SUMMARY:
