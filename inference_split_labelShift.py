@@ -26,7 +26,10 @@ DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_la
 # DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_10k_generated'
 # PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
 
-DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_40k_generated'
+# DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_40k_generated'
+# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
+
+DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_max_generated'
 PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
 
 if DIR_TEST.endswith('/'):
@@ -96,8 +99,7 @@ def test_model(model):
     fp.close()
 
     path_make_sh = join(path_out_root, 'make_combine.sh')
-    # path_out_combine = join(path_out_root, 'combine')
-    # makedirs(path_out_combine)
+    path_out_combine = join(path_out_root, 'combine')
 
     with open(path_make_sh, 'w') as fp:
         fp.write(f'mkdir combine\n')
