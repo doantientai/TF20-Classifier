@@ -17,9 +17,9 @@ from shutil import copyfile
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_10k_selected'
 
-DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
-DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline_augmentation'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
+# DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline'
 
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_128'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
@@ -34,28 +34,42 @@ EARLY_STOP = 3  # Number of waiting epochs or None
 
 BATCH_SIZE = 512
 VAL_BATCH_SIZE = 1000
-EPOCHS = 10
+EPOCHS = 100
 IMG_HEIGHT = IMG_WIDTH = 32
 
 SUMMARY = False
 
-num_train_samples_per_epoch = 1000000
+num_train_samples_per_epoch = 10000
 num_valid_samples_per_epoch = 10000
+
+### model
+list_classes = [str(i) for i in range(10)]
+num_classes = len(list_classes)
+classifier = Sequential([
+        Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
+        MaxPooling2D(),
+        Conv2D(32, 3, padding='same', activation='relu'),
+        MaxPooling2D(),
+        Conv2D(64, 3, padding='same', activation='relu'),
+        MaxPooling2D(),
+        Flatten(),
+        Dense(512, activation='relu'),
+        Dense(num_classes, activation='softmax')
+    ])
+
 
 if __name__ == '__main__':
     os.makedirs(DIR_PROJECT)
     copyfile(os.path.join(os.getcwd(), 'train.py'),
              os.path.join(DIR_PROJECT, 'train.py'))
-
-    list_classes = [str(i) for i in range(10)]
-    num_classes = len(list_classes)
     print(f'Categories:')
     print(list_classes)
 
+    # Generator for training data and validation data
     train_image_generator = ImageDataGenerator(
-        rescale=1./255
-    )  # Generator for our training data
-
+        rescale=1./255,
+        # TODO: Data augmentation options
+    )
     valid_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our validation data
 
     train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
@@ -74,36 +88,28 @@ if __name__ == '__main__':
 
     sample_training_images, _ = next(train_data_gen)
 
-    model = Sequential([
-        Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
-        MaxPooling2D(),
-        Conv2D(32, 3, padding='same', activation='relu'),
-        MaxPooling2D(),
-        Conv2D(64, 3, padding='same', activation='relu'),
-        MaxPooling2D(),
-        Flatten(),
-        Dense(512, activation='relu'),
-        Dense(num_classes, activation='softmax')
-    ])
-
-    # model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     if SUMMARY:
-        model.summary()
+        classifier.summary()
 
     dir_tensorboard = os.path.join(DIR_PROJECT, 'logs')
     dir_save_models = os.path.join(DIR_PROJECT, 'models')
+    os.makedirs(dir_save_models)
     callbacks = [
-        # Write TensorBoard logs to `./logs` directory
         tf.keras.callbacks.TensorBoard(log_dir=dir_tensorboard),
-        # save model
-        tf.keras.callbacks.ModelCheckpoint(filepath=dir_save_models)
+        tf.keras.callbacks.ModelCheckpoint(
+            os.path.join(dir_save_models, 'weights.{epoch:02d}-{val_accuracy:.4f}.hdf5'),
+            monitor='val_accuracy',
+            save_best_only=True,
+            save_weights_only=True,
+            save_freq='epoch'
+        )
     ]
     # Interrupt training if `val_loss` stops improving for over EARLY_STOP epochs
     if EARLY_STOP is not None:
-        callbacks.append(tf.keras.callbacks.EarlyStopping(patience=EARLY_STOP, monitor='val_loss'))
+        callbacks.append(tf.keras.callbacks.EarlyStopping(patience=EARLY_STOP, monitor='val_accuracy'))
 
-    history = model.fit_generator(
+    history = classifier.fit_generator(
         train_data_gen,
         steps_per_epoch=num_train_samples_per_epoch // BATCH_SIZE,
         epochs=EPOCHS,
