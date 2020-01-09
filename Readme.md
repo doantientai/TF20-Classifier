@@ -8,6 +8,7 @@ conda activate tf20
 conda install pillow
 ```
 
-## TODO
+#TODO
 - tfrecord
 - more architecture templates
+- Data augmentation

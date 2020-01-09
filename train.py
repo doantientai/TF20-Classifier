@@ -7,24 +7,27 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 from shutil import copyfile
 
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_20k_generated_split/combine'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_MNIST_1k_baseline'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_20k_selected'
 
-# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_10k_generated_split/combine'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_10k_selected'
+
+DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
+DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_1k_baseline_augmentation'
 
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_128'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_128_baseline'
 
-DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10_'
-DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
-DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_10_baseline_categorical_loss'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
+# DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_001_A_10_baseline_categorical_loss'
 EARLY_STOP = 3  # Number of waiting epochs or None
 
 # EARLY_STOP = None  # Number of waiting epochs or None
@@ -33,6 +36,8 @@ BATCH_SIZE = 512
 VAL_BATCH_SIZE = 1000
 EPOCHS = 10
 IMG_HEIGHT = IMG_WIDTH = 32
+
+SUMMARY = False
 
 num_train_samples_per_epoch = 1000000
 num_valid_samples_per_epoch = 10000
@@ -47,7 +52,10 @@ if __name__ == '__main__':
     print(f'Categories:')
     print(list_classes)
 
-    train_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our training data
+    train_image_generator = ImageDataGenerator(
+        rescale=1./255
+    )  # Generator for our training data
+
     valid_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our validation data
 
     train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
@@ -80,7 +88,8 @@ if __name__ == '__main__':
 
     # model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    model.summary()
+    if SUMMARY:
+        model.summary()
 
     dir_tensorboard = os.path.join(DIR_PROJECT, 'logs')
     dir_save_models = os.path.join(DIR_PROJECT, 'models')
