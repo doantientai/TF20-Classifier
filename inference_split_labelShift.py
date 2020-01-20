@@ -21,23 +21,38 @@ from shutil import copyfile
 # tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
-DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
-
-# DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_10k_generated'
+# DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
 # PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
+# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.03-0.9466.hdf5'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_LL1k/ckpt370k/trainA_1k_B10k_generated'
+#
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_10k_generated'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_40k_generated'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_max_generated'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_maxX3_generated'
+#
+# DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
+# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_max_baseline/models/weights.35-0.9932.hdf5'
+#
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6losses/ckpt_370k/Amax_B10k_generated'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6losses/ckpt_370k/Amax_B40k_generated'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6losses/ckpt_370k/Amax_Bmax_generated'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6losses/ckpt_370k/Amax_BmaxX3_generated'
 
-# DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_40k_generated'
-# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
+# ### 1 shot
+# DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10'
+# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_baseline/models/weights.71-0.4971.hdf5'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated'
 
-# DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_max_generated'
-# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
+### 20 shots
+DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_200'
+PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A200_baseline/models/weights.08-0.8395.hdf5'
+DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_200/ckpt370k/trainA_200_B_full_generated'
 
-DIR_TEST = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL1k/ckpt_370k/trainA_maxX3_generated'
-PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
 
-if DIR_TEST.endswith('/'):
-    path_data_inference = DIR_TEST[:-1]
-path_out_root = DIR_TEST + '_split'
+if DIR_INF.endswith('/'):
+    path_data_inference = DIR_INF[:-1]
+path_out_root = DIR_INF + '_split'
 path_out_text = join(path_out_root, 'split.txt')
 path_out_keep = join(path_out_root, "keep")
 path_out_drop = join(path_out_root, "drop")
@@ -69,14 +84,14 @@ def process_path(file_path):
 
 def test_model(model):
     list_file_paths = []
-    for path, subdirs, files in os.walk(DIR_TEST):
+    for path, subdirs, files in os.walk(DIR_INF):
         for name in files:
             list_file_paths.append(os.path.join(path, name))
         for subdir in subdirs:
             makedirs(join(path_out_keep, subdir), exist_ok=True)
             makedirs(join(path_out_drop, subdir), exist_ok=True)
 
-    list_ds = tf.data.Dataset.list_files(str(DIR_TEST+'/*/*'))
+    list_ds = tf.data.Dataset.list_files(str(DIR_INF + '/*/*'))
     labeled_ds = list_ds.map(process_path, num_parallel_calls=AUTOTUNE)
 
     fp = open(path_out_text, 'a')
@@ -92,10 +107,10 @@ def test_model(model):
         label_gt = int(label.numpy().argmax())
         if int(predicted_label) == label_gt:
             print('Keep')
-            copyfile(file_path_str, join(file_path_str.replace(DIR_TEST, path_out_keep)))
+            copyfile(file_path_str, join(file_path_str.replace(DIR_INF, path_out_keep)))
         else:
             print('Drop')
-            copyfile(file_path_str, join(file_path_str.replace(DIR_TEST, path_out_drop)))
+            copyfile(file_path_str, join(file_path_str.replace(DIR_INF, path_out_drop)))
         ### log to text file
         score = prediction.max()
         fp.write(f'{image_name}\t{label_gt}\t{predicted_label}\t{score}\n')
