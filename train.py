@@ -2,14 +2,17 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import tensorflow as tf
 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization, ReLU, Activation, ZeroPadding2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.regularizers import l2
+
 
 import os
 import numpy as np
 from shutil import copyfile
 
 import logging
+
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 # gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -100,9 +103,19 @@ DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_200/ckpt370k/trainA_200_B_full_generated_split/combine'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A200_Bfull'
 
-# train on source (B) only
-DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainB'
-DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_source_B_only'
+# # train on source (B) only
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainB'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_source_B_only'
+
+# ################ Train FC network: too slow
+# # only target
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/FCNet/train_003_target_A_only'
+
+################ Train AlexNet
+# only target
+DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
+DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/AlexNet/train_003_target_A_only'
 
 # RESUME = True
 RESUME = False
@@ -110,7 +123,7 @@ RESUME = False
 EARLY_STOP = None  # Number of waiting epochs or None
 # EARLY_STOP = 20  # Number of waiting epochs or None
 
-BATCH_SIZE = 512
+BATCH_SIZE = 128
 VAL_BATCH_SIZE = 1000
 EPOCHS = 200
 IMG_HEIGHT = IMG_WIDTH = 32
@@ -123,17 +136,94 @@ num_valid_samples_per_epoch = 10000
 ### model
 list_classes = [str(i) for i in range(10)]
 num_classes = len(list_classes)
-classifier = Sequential([
-        Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
-        MaxPooling2D(),
-        Conv2D(32, 3, padding='same', activation='relu'),
-        MaxPooling2D(),
-        Conv2D(64, 3, padding='same', activation='relu'),
-        MaxPooling2D(),
-        Flatten(),
-        Dense(512, activation='relu'),
-        Dense(num_classes, activation='softmax')
-    ])
+
+
+# classifier = Sequential([
+#         Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
+#         MaxPooling2D(),
+#         Conv2D(32, 3, padding='same', activation='relu'),
+#         MaxPooling2D(),
+#         Conv2D(64, 3, padding='same', activation='relu'),
+#         MaxPooling2D(),
+#         Flatten(),
+#         Dense(512, activation='relu'),
+#         Dense(num_classes, activation='softmax')
+#     ])
+
+# classifier = Sequential([ ## super slow
+#     Flatten(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
+#     Dense(100),
+#     BatchNormalization(),
+#     ReLU(),
+#     Dropout(rate=0.5),
+#     Dense(100),
+#     BatchNormalization(),
+#     ReLU(),
+#     Dense(num_classes, activation='softmax')
+#     ])
+
+def alexnet_model(img_shape=(224, 224, 3), n_classes=10, l2_reg=0., weights=None):
+    # Initialize model
+    alexnet = Sequential()
+
+    # Layer 1
+    alexnet.add(Conv2D(96, (11, 11), input_shape=img_shape,
+                       padding='same', kernel_regularizer=l2(l2_reg)))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Layer 2
+    alexnet.add(Conv2D(256, (5, 5), padding='same'))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Layer 3
+    alexnet.add(ZeroPadding2D((1, 1)))
+    alexnet.add(Conv2D(512, (3, 3), padding='same'))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Layer 4
+    alexnet.add(ZeroPadding2D((1, 1)))
+    alexnet.add(Conv2D(1024, (3, 3), padding='same'))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+
+    # Layer 5
+    alexnet.add(ZeroPadding2D((1, 1)))
+    alexnet.add(Conv2D(1024, (3, 3), padding='same'))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Layer 6
+    alexnet.add(Flatten())
+    alexnet.add(Dense(3072))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+    alexnet.add(Dropout(0.5))
+
+    # Layer 7
+    alexnet.add(Dense(4096))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('relu'))
+    alexnet.add(Dropout(0.5))
+
+    # Layer 8
+    alexnet.add(Dense(n_classes))
+    alexnet.add(BatchNormalization())
+    alexnet.add(Activation('softmax'))
+
+    if weights is not None:
+        alexnet.load_weights(weights)
+
+    return alexnet
+
+
+classifier = alexnet_model(img_shape=(IMG_HEIGHT, IMG_WIDTH, 3), n_classes=num_classes)
 
 
 if __name__ == '__main__':
@@ -147,11 +237,11 @@ if __name__ == '__main__':
 
     # Generator for training data and validation data
     train_image_generator = ImageDataGenerator(
-        rescale=1./255,
-        validation_split=0.1
+        rescale=1. / 255,
+        # validation_split=0.1
         # TODO: Data augmentation options
     )
-    valid_image_generator = ImageDataGenerator(rescale=1./255)  # Generator for our validation data
+    valid_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our validation data
 
     train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
                                                                directory=DIR_TRAIN,
@@ -195,7 +285,7 @@ if __name__ == '__main__':
         tf.keras.callbacks.ModelCheckpoint(
             os.path.join(dir_save_models, 'weights.{epoch:02d}-{val_accuracy:.4f}.hdf5'),
             monitor='val_accuracy',
-            save_best_only=True,
+            save_best_only=False,
             save_weights_only=True,
             save_freq='epoch'
         )]
@@ -213,4 +303,3 @@ if __name__ == '__main__':
         validation_steps=num_valid_samples_per_epoch // BATCH_SIZE,
         callbacks=callbacks,
     )
-
