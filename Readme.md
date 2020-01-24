@@ -1,4 +1,4 @@
-https://img.shields.io/badge/Difficulty-0%25-green
+![](https://img.shields.io/badge/Difficulty-Easy-green)
 ## Introduction
 A super simple implementation of a classifier using tensorflow 2.0.0
 ## Installing environment
