@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import tensorflow as tf
 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization, ReLU, Activation, ZeroPadding2D
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization, ReLU, Activation, ZeroPadding2D, AveragePooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.regularizers import l2
 
@@ -90,9 +90,49 @@ DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels
 # baseline
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_baseline'
-# B full
+# B full, training on kept samples
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated_split/combine'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull'
+# B full, training on all samples (no filtering)
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull_no_filter'
+# B full real 1, training on all samples (no filtering)
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated_split/keep_all_and_combine_real_1'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull_real_1_no_filter'
+
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x4_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull_x4_no_filter'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x4_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull_x4_no_filter_bs_128'
+
+### LeNetDANN + SGD, keep all generated (no filter)
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x4_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull_x4'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A_max_baseline'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainB'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_source_B_only'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_B0'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x2_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull_x2'
+DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL0/ckpt_370k/trainA_0_Bmax'
+DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A0_Bfull'
+
+
+# # B full x2, training on all samples (no filtering)
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x2_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull_x2_no_filter'
+
+### 1 shot, CC6l
+# # B full, training on all samples (no filtering)
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_1shot/ckpt320k/trainA_10_B_full_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC6l/train_002_A10_Bfull_no_filter'
+# B full with filter
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_1shot/ckpt320k/trainA_10_B_full_generated_split/combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC6l/train_002_A10_Bfull_with_filter'
 
 ### 20 shots
 # # baseline
@@ -112,10 +152,13 @@ DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/FCNet/train_003_target_A_only'
 
-################ Train AlexNet
+################ Train AlexNet: also took ~2h to converge, but heavier
 # only target
-DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
-DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/AlexNet/train_003_target_A_only'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/AlexNet/train_003_target_A_only'
+# # # train on source (B) only
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainB'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/AlexNet/train_002_source_B_only'
 
 # RESUME = True
 RESUME = False
@@ -123,7 +166,7 @@ RESUME = False
 EARLY_STOP = None  # Number of waiting epochs or None
 # EARLY_STOP = 20  # Number of waiting epochs or None
 
-BATCH_SIZE = 128
+BATCH_SIZE = 512
 VAL_BATCH_SIZE = 1000
 EPOCHS = 200
 IMG_HEIGHT = IMG_WIDTH = 32
@@ -150,6 +193,36 @@ num_classes = len(list_classes)
 #         Dense(num_classes, activation='softmax')
 #     ])
 
+### CNN in DANN for MNIST
+classifier = Sequential([
+    Conv2D(32, 5, padding='same', activation='relu', input_shape=[IMG_HEIGHT, IMG_WIDTH, 3]),
+    MaxPooling2D(strides=2),
+    Conv2D(48, 5, padding='same', activation='relu'),
+    MaxPooling2D(strides=2),
+    Flatten(),
+    Dense(100, activation='relu'),
+    Dense(100, activation='relu'),
+    Dense(num_classes, activation='softmax')
+])
+
+
+# def lenet_model():
+#     model = Sequential()
+#     model.add(Conv2D(filters=6, kernel_size=(3, 3), activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)))
+#     model.add(AveragePooling2D())
+#     # model.add(MaxPooling2D())
+#     model.add(Conv2D(filters=16, kernel_size=(3, 3), activation='relu'))
+#     model.add(AveragePooling2D())
+#     # model.add(MaxPooling2D())
+#     model.add(Flatten())
+#     model.add(Dense(units=120, activation='relu'))
+#     model.add(Dense(units=84, activation='relu'))
+#     model.add(Dense(units=num_classes, activation='softmax'))
+#     return model
+#
+#
+# classifier = lenet_model()
+
 # classifier = Sequential([ ## super slow
 #     Flatten(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
 #     Dense(100),
@@ -162,68 +235,68 @@ num_classes = len(list_classes)
 #     Dense(num_classes, activation='softmax')
 #     ])
 
-def alexnet_model(img_shape=(224, 224, 3), n_classes=10, l2_reg=0., weights=None):
-    # Initialize model
-    alexnet = Sequential()
-
-    # Layer 1
-    alexnet.add(Conv2D(96, (11, 11), input_shape=img_shape,
-                       padding='same', kernel_regularizer=l2(l2_reg)))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
-
-    # Layer 2
-    alexnet.add(Conv2D(256, (5, 5), padding='same'))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
-
-    # Layer 3
-    alexnet.add(ZeroPadding2D((1, 1)))
-    alexnet.add(Conv2D(512, (3, 3), padding='same'))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
-
-    # Layer 4
-    alexnet.add(ZeroPadding2D((1, 1)))
-    alexnet.add(Conv2D(1024, (3, 3), padding='same'))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-
-    # Layer 5
-    alexnet.add(ZeroPadding2D((1, 1)))
-    alexnet.add(Conv2D(1024, (3, 3), padding='same'))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-    alexnet.add(MaxPooling2D(pool_size=(2, 2)))
-
-    # Layer 6
-    alexnet.add(Flatten())
-    alexnet.add(Dense(3072))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-    alexnet.add(Dropout(0.5))
-
-    # Layer 7
-    alexnet.add(Dense(4096))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('relu'))
-    alexnet.add(Dropout(0.5))
-
-    # Layer 8
-    alexnet.add(Dense(n_classes))
-    alexnet.add(BatchNormalization())
-    alexnet.add(Activation('softmax'))
-
-    if weights is not None:
-        alexnet.load_weights(weights)
-
-    return alexnet
-
-
-classifier = alexnet_model(img_shape=(IMG_HEIGHT, IMG_WIDTH, 3), n_classes=num_classes)
+# def alexnet_model(img_shape=(224, 224, 3), n_classes=10, l2_reg=0., weights=None):
+#     # Initialize model
+#     alexnet = Sequential()
+#
+#     # Layer 1
+#     alexnet.add(Conv2D(96, (11, 11), input_shape=img_shape,
+#                        padding='same', kernel_regularizer=l2(l2_reg)))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#     alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+#
+#     # Layer 2
+#     alexnet.add(Conv2D(256, (5, 5), padding='same'))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#     alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+#
+#     # Layer 3
+#     alexnet.add(ZeroPadding2D((1, 1)))
+#     alexnet.add(Conv2D(512, (3, 3), padding='same'))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#     alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+#
+#     # Layer 4
+#     alexnet.add(ZeroPadding2D((1, 1)))
+#     alexnet.add(Conv2D(1024, (3, 3), padding='same'))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#
+#     # Layer 5
+#     alexnet.add(ZeroPadding2D((1, 1)))
+#     alexnet.add(Conv2D(1024, (3, 3), padding='same'))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#     alexnet.add(MaxPooling2D(pool_size=(2, 2)))
+#
+#     # Layer 6
+#     alexnet.add(Flatten())
+#     alexnet.add(Dense(3072))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#     alexnet.add(Dropout(0.5))
+#
+#     # Layer 7
+#     alexnet.add(Dense(4096))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('relu'))
+#     alexnet.add(Dropout(0.5))
+#
+#     # Layer 8
+#     alexnet.add(Dense(n_classes))
+#     alexnet.add(BatchNormalization())
+#     alexnet.add(Activation('softmax'))
+#
+#     if weights is not None:
+#         alexnet.load_weights(weights)
+#
+#     return alexnet
+#
+#
+# classifier = alexnet_model(img_shape=(IMG_HEIGHT, IMG_WIDTH, 3), n_classes=num_classes)
 
 
 if __name__ == '__main__':
@@ -257,7 +330,8 @@ if __name__ == '__main__':
                                                                class_mode='categorical',
                                                                classes=list_classes)
 
-    classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    # classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    classifier.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
     if SUMMARY:
         classifier.summary()
 

@@ -20,6 +20,8 @@ from shutil import copyfile
 
 # tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 AUTOTUNE = tf.data.experimental.AUTOTUNE
+gpus = tf.config.experimental.list_physical_devices('GPU')
+tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4000)])
 
 # DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
 # PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/train_002_A_1k_baseline/models/weights.07-0.9443.hdf5'
@@ -39,15 +41,20 @@ AUTOTUNE = tf.data.experimental.AUTOTUNE
 # DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6losses/ckpt_370k/Amax_Bmax_generated'
 # DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6losses/ckpt_370k/Amax_BmaxX3_generated'
 
-# ### 1 shot
+# ### 1 shot CC4l
 # DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10'
 # PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_baseline/models/weights.71-0.4971.hdf5'
 # DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated'
 
-### 20 shots
-DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_200'
-PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A200_baseline/models/weights.08-0.8395.hdf5'
-DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_200/ckpt370k/trainA_200_B_full_generated'
+# ### 1 shot CC6l
+DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_10'
+PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_baseline/models/weights.71-0.4971.hdf5'
+DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_1shot/ckpt320k/trainA_10_B_full_generated'
+
+# ### 20 shots
+# DIR_REAL_DATA = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_200'
+# PATH_WEIGHTS = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A200_baseline/models/weights.08-0.8395.hdf5'
+# DIR_INF = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_200/ckpt370k/trainA_200_B_full_generated'
 
 
 if DIR_INF.endswith('/'):
