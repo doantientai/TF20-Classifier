@@ -15,8 +15,8 @@ import logging
 
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4000)])
+gpus = tf.config.experimental.list_physical_devices('GPU')
+tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4000)])
 
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA_1k'
 # DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/testA'
@@ -106,6 +106,7 @@ DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/CC4l/train_002_A10_Bfull_x4_no_filter_bs_128'
 
 ### LeNetDANN + SGD, keep all generated (no filter)
+## CC4l_1shot
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x4_generated_split/keep_all_and_combine'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull_x4'
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/trainA'
@@ -117,10 +118,38 @@ DIR_VALID = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_generated_split/keep_all_and_combine'
 # DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull'
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x2_generated_split/keep_all_and_combine'
-# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull_x2'
-DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL0/ckpt_370k/trainA_0_Bmax'
-DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A0_Bfull'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull_x2_dup'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x2_generated_split/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A10_Bfull_x2_dup_02'
+## CC6l_0shot
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL0/ckpt_370k/trainA_0_Bmax'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A0_Bfull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL0/ckpt_370k/trainA_0_Bfull_x2_generated'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A0_Bfull_x2'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_LL0/ckpt_370k/trainA_0_Bfull_x4_generated'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/train_002_A0_Bfull_x4'
 
+# ## CC6lU_1shot (CC6l upgraded)
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6lU_LL0/ckpt_400k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6lU_400k_A10_BFull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6lU_LL0/ckpt_370k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6lU_370k_A10_BFull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6lU_LL0/ckpt_300k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6lU_300k_A10_BFull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6lU_LL0/ckpt_200k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6lU_200k_A10_BFull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6lU_LL0/ckpt_500k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6lU_500k_A10_BFull'
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6lU_LL0/ckpt_600k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6lU_600k_A10_BFull'
+
+## CC6l old (before upgraded)
+DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_1shot/ckpt320k/trainA_10_B_full_generated_split/keep_all_and_combine'
+DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/CC6l_320k_A10_BFull'
+
+# ## MUNIT_CC6l_1shot_cp_fr_CC4l_1shot
+# DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC6l_1shot_cp_fr_CC4l_1shot/ckpt_400k/A10_BFull_generated_combine/keep_all_and_combine'
+# DIR_PROJECT = '/media/tai/6TB/Projects/TF20/Classifier/Projects/LeNetDANN-SGD/MUNIT_CC6l_1shot_cp_fr_CC4l_1shot'
 
 # # B full x2, training on all samples (no filtering)
 # DIR_TRAIN = '/media/tai/6TB/Projects/InfoMUNIT/Data/ForMUNIT/mnist2svhn_w_labels/augmented_by_infoMUNIT/MUNIT_CC4l_1shot/ckpt370k/trainA_10_B_full_x2_generated_split/keep_all_and_combine'
